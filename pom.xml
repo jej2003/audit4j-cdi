@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.audit4j</groupId>
+	<artifactId>audit4j-cdi</artifactId>
+	<packaging>jar</packaging>
+	<name>Audit4j - CDI Integration</name>
+	<version>1.0.0.alpha1</version>
+	<url>http://audit4j.org</url>
+	<description>Audit4j - An open-source auditing framework for Java, CDI Integration</description>
+	<organization>
+		<name>Audit4j</name>
+		<url>http://audit4j.org</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<issueManagement>
+		<system>mantis</system>
+		<url>http://audit4j.org/bugs</url>
+	</issueManagement>
+	<scm>
+		<connection>scm:git:git@github.com:audit4j/audit4j-cdi.git</connection>
+		<developerConnection>scm:git:git@github.com:audit4j/audit4j-cdi.git</developerConnection>
+		<url>scm:git:git@github.com:audit4j/audit4j-cdi.git</url>
+		<tag>2.3.0</tag>
+	</scm>
+	<developers>
+		<developer>
+			<id>janith</id>
+			<name>Janith Bandara</name>
+			<organization>Audit4j</organization>
+			<organizationUrl>http://audit4j.org</organizationUrl>
+			<email>janith@audit4j.org</email>
+			<roles>
+				<role>owner</role>
+				<role>developer</role>
+			</roles>
+			<timezone>+05:30</timezone>
+		</developer>
+	</developers>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<properties>
+		<junit.version>4.11</junit.version>
+		<audit4j.version>2.3.0</audit4j.version>
+		<cdi-api.version>1.2</cdi-api.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Audit4j Core -->
+		<dependency>
+			<groupId>org.audit4j</groupId>
+			<artifactId>audit4j-core</artifactId>
+			<version>${audit4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- CDI -->
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>${cdi-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>org.foo.App</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
