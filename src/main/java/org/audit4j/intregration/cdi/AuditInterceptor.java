@@ -8,7 +8,7 @@ import org.audit4j.core.AuditManager;
 import org.audit4j.core.annotation.Audit;
 
 /**
- * The Class Interceptor.
+ * The Audit Interceptor for CDI spec implementations.
  * 
  * For Jboss Weld:
  * 
@@ -24,13 +24,16 @@ import org.audit4j.core.annotation.Audit;
  * </pre>
  * 
  * @author <a href="mailto:janith3000@gmail.com">Janith Bandara</a>
+ * 
+ * @since core 2.3.1
+ * @since audit4j-cdi 1.0.0
  */
 @Audit
 @Interceptor
 public class AuditInterceptor {
 
     /**
-     * Before.
+     * Before method invocation.
      * 
      * @param joinPoint
      *            the join point
