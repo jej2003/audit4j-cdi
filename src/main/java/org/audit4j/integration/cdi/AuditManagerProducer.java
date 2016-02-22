@@ -18,15 +18,14 @@
 
 package org.audit4j.integration.cdi;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Startup;
-import javax.ejb.Singleton;
+import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.audit4j.core.AuditManager;
 import org.audit4j.core.Configuration;
 import org.audit4j.core.CoreConstants;
+import org.audit4j.core.IAuditManager;
 import org.audit4j.core.MetaData;
 import org.audit4j.core.filter.AuditEventFilter;
 import org.audit4j.core.handler.Handler;
@@ -34,13 +33,12 @@ import org.audit4j.core.layout.Layout;
 import org.audit4j.core.util.ReflectUtil;
 
 /**
- * The Class ContextConfigurations.
+ * The Class AuditManagerProducer.
  * 
  * @author <a href="mailto:janith3000@gmail.com">Janith Bandara</a>
+ * @author <a href="mailto:jej2003@gmail.com">Jamie Johnson</a>
  */
-@Singleton
-@Startup
-public class ContextConfigurations {
+public class AuditManagerProducer {
 
     /** The handlers. */
     @Inject
@@ -75,8 +73,8 @@ public class ContextConfigurations {
     /**
      * Initialize audit4j.
      */
-    @PostConstruct
-    public void init() {
+    @Produces
+    public IAuditManager auditManager() {
         Configuration config = Configuration.INSTANCE;
         config.setHandlers(new ReflectUtil<Handler>().getNewInstanceList(handlers.split(CoreConstants.SEMI_COLON)));
         config.setLayout(new ReflectUtil<Layout>().getNewInstance(layout));
@@ -98,13 +96,13 @@ public class ContextConfigurations {
             }
         }
         AuditManager.startWithConfiguration(config);
+        return AuditManager.getInstance();
     }
 
     /**
      * Stop.
      */
-    @PreDestroy
-    public void stop() {
+    public void stop(@Disposes IAuditManager manager) {
         AuditManager.shutdown();
     }
 }
