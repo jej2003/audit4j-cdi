@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.audit4j.intregration.cdi;
+package org.audit4j.integration.cdi;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

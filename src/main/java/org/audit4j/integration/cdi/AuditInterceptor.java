@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.audit4j.intregration.cdi;
+package org.audit4j.integration.cdi;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -60,7 +60,7 @@ public class AuditInterceptor {
      *             the throwable
      */
     @AroundInvoke
-    public Object before(InvocationContext joinPoint) throws Throwable {
+    public Object before(InvocationContext joinPoint) throws Exception {
         AuditManager.getInstance().audit(joinPoint.getTarget().getClass(), joinPoint.getMethod(),
                 joinPoint.getParameters());
         return joinPoint.proceed();

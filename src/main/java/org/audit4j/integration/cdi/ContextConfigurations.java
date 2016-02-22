@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
-package org.audit4j.intregration.cdi;
+package org.audit4j.integration.cdi;
 
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Startup;
+import javax.ejb.Singleton;
+import javax.inject.Inject;
 
 import org.audit4j.core.AuditManager;
 import org.audit4j.core.Configuration;
@@ -36,30 +38,37 @@ import org.audit4j.core.util.ReflectUtil;
  * 
  * @author <a href="mailto:janith3000@gmail.com">Janith Bandara</a>
  */
-@ManagedBean
+@Singleton
+@Startup
 public class ContextConfigurations {
 
     /** The handlers. */
+    @Inject
     @InjectedProperty(key = "audit.handlers", mandatory = true)
     String handlers;
 
     /** The layout. */
+    @Inject
     @InjectedProperty(key = "audit.layout", mandatory = true)
     String layout;
 
     /** The filters. */
-    @InjectedProperty(key = "audit.filters", mandatory = true)
+    @Inject
+    @InjectedProperty(key = "audit.filters", mandatory = false)
     String filters;
 
     /** The options. */
-    @InjectedProperty(key = "audit.options", mandatory = true)
+    @Inject
+    @InjectedProperty(key = "audit.options", mandatory = false)
     String options;
 
     /** The meta data. */
-    @InjectedProperty(key = "audit.metaData", , mandatory = true)
+    @Inject
+    @InjectedProperty(key = "audit.metaData", mandatory = false)
     String metaData;
 
     /** The properties. */
+    @Inject
     @InjectedProperty(key = "audit.properties", mandatory = false)
     String properties;
 
@@ -71,14 +80,22 @@ public class ContextConfigurations {
         Configuration config = Configuration.INSTANCE;
         config.setHandlers(new ReflectUtil<Handler>().getNewInstanceList(handlers.split(CoreConstants.SEMI_COLON)));
         config.setLayout(new ReflectUtil<Layout>().getNewInstance(layout));
-        config.setFilters(new ReflectUtil<AuditEventFilter>().getNewInstanceList(filters
-                .split(CoreConstants.SEMI_COLON)));
-        config.setOptions(options);
-        config.setMetaData(new ReflectUtil<MetaData>().getNewInstance(metaData));
-        String[] propertiesList = properties.split(CoreConstants.SEMI_COLON);
-        for (String property : propertiesList) {
-            String[] keyValue = property.split(CoreConstants.COLON);
-            config.addProperty(keyValue[0], keyValue[1]);
+        if(filters.length() > 0) {
+            config.setFilters(new ReflectUtil<AuditEventFilter>().getNewInstanceList(filters
+                    .split(CoreConstants.SEMI_COLON)));
+        }
+        if(options.length() > 0) {
+            config.setCommands(options);
+        }
+        if(metaData.length() > 0) {
+            config.setMetaData(new ReflectUtil<MetaData>().getNewInstance(metaData));
+        }
+        if(properties.length() > 0) {
+            String[] propertiesList = properties.split(CoreConstants.SEMI_COLON);
+            for (String property : propertiesList) {
+                String[] keyValue = property.split(CoreConstants.COLON);
+                config.addProperty(keyValue[0], keyValue[1]);
+            }
         }
         AuditManager.startWithConfiguration(config);
     }
@@ -88,6 +105,6 @@ public class ContextConfigurations {
      */
     @PreDestroy
     public void stop() {
-        AuditManager.getInstance().shutdown();
+        AuditManager.shutdown();
     }
 }
