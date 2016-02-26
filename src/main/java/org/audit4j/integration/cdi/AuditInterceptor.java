@@ -18,11 +18,12 @@
 
 package org.audit4j.integration.cdi;
 
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.audit4j.core.AuditManager;
+import org.audit4j.core.IAuditManager;
 import org.audit4j.core.annotation.Audit;
 
 /**
@@ -42,6 +43,7 @@ import org.audit4j.core.annotation.Audit;
  * </pre>
  * 
  * @author <a href="mailto:janith3000@gmail.com">Janith Bandara</a>
+ * @author <a href="mailto:jej2003@gmail.com">Jamie Johnson</a>
  * 
  * @since core 2.3.1
  * @since audit4j-cdi 1.0.0
@@ -49,6 +51,13 @@ import org.audit4j.core.annotation.Audit;
 @Audit
 @Interceptor
 public class AuditInterceptor {
+
+    protected IAuditManager auditManager;
+
+    @Inject
+    public AuditInterceptor(IAuditManager auditManager) {
+        this.auditManager = auditManager;
+    }
 
     /**
      * Before method invocation.
@@ -61,7 +70,7 @@ public class AuditInterceptor {
      */
     @AroundInvoke
     public Object before(InvocationContext joinPoint) throws Exception {
-        AuditManager.getInstance().audit(joinPoint.getTarget().getClass(), joinPoint.getMethod(),
+        auditManager.audit(joinPoint.getTarget().getClass(), joinPoint.getMethod(),
                 joinPoint.getParameters());
         return joinPoint.proceed();
     }
